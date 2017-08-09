@@ -528,7 +528,8 @@ dpdk_mapping_lcores_ports(uint8_t nb_ports, const char *lcore_mask)
             zen_panic("lcore_mask %s not xdigit\n", lcore_mask);
         }
         uint8_t tmp = xdigit2val(lcore_mask[i]);
-        for (uint8_t j = 0; j < 4 && lcore_id < RTE_MAX_LCORE; j++, lcore_id++) {
+        for (uint8_t j = 0; j < 4 && lcore_id < RTE_MAX_LCORE;
+            j++, lcore_id++) {
             if ((1 << j) & tmp) {
                 dm->lcore_info[lcore_id].port_num = port_id;
                 dm->lcore_info[lcore_id].queue_num = queue_id;
