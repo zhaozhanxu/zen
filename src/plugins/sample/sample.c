@@ -2,6 +2,7 @@
 #include "plugins.h"
 #include "node.h"
 #include "init.h"
+#include "cli.h"
 
 #define NEXT_FORWARD	0
 #define NEXT_VLAN		1
@@ -58,6 +59,17 @@ REGISTER_NODE(sample_node) = {
         .function	= sample,
         .name		= "sample",
     }
+};
+
+static bool show_sample(void)
+{
+    return true;
+}
+
+CLI_COMMAND(show_sample_command) = {
+    .path		= "show sample info",
+    .f			= show_sample,
+    .help		= "show sample",
 };
 
 static bool ethernet_input_init(void)
