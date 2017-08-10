@@ -61,7 +61,8 @@ REGISTER_NODE(sample_node) = {
     }
 };
 
-static bool show_sample(void)
+static bool
+show_sample(void)
 {
     return true;
 }
@@ -72,7 +73,8 @@ CLI_COMMAND(show_sample_command) = {
     .help		= "show sample",
 };
 
-static bool ethernet_input_init(void)
+static bool
+ethernet_input_init(void)
 {
     uint8_t count = rte_eth_dev_count();
     for (uint8_t i = 0; i < count; i++) {
@@ -83,7 +85,8 @@ static bool ethernet_input_init(void)
 
 INIT_FUNCTION(ethernet_input_init);
 
-bool plugin_register(void)
+bool
+plugin_register(void)
 {
     //get the heart
     return true;

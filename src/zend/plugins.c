@@ -3,10 +3,8 @@
 static plugins_t *plugins = NULL;
 
 static bool
-load_one_plugin(char *path, char *name)
+load_one_plugin(char *file, char *name)
 {
-    char file[256];
-    sprintf(file, "%s/%s", path, name);
     void *handle = dlopen(file, RTLD_LAZY);
     if (handle == NULL) {
         zen_log(RTE_LOG_WARNING, "%s\n", dlerror());
@@ -41,7 +39,9 @@ load_one_plugin(char *path, char *name)
         plugins->nb_plugins = 1;
     } else {
         plugins_t *tmp_plugins = plugins;
-        plugins = realloc(tmp_plugins, sizeof(plugin_info_t));
+        size_t size = sizeof(plugins_t) + (sizeof(plugin_info_t) *
+                                           (plugins->nb_plugins + 1));
+        plugins = realloc(tmp_plugins, size);
         if (unlikely(!plugins)) {
             free(tmp_plugins);
             zen_panic("realloc plugin main err!\n");
@@ -78,7 +78,9 @@ load_plugins(void)
         struct dirent *dp;
         while ((dp = readdir(dfp))) {
             struct stat status;
-            if (stat(dp->d_name, &status) < 0) {
+            char file[256];
+            sprintf(file, "%s/%s", plugin_path, dp->d_name);
+            if (stat(file, &status) < 0) {
                 continue;
             }
 
@@ -86,7 +88,7 @@ load_plugins(void)
                 continue;
             }
 
-            if (!load_one_plugin(plugin_path, dp->d_name)) {
+            if (!load_one_plugin(file, dp->d_name)) {
                 continue;
             }
         }

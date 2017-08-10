@@ -8,6 +8,8 @@ SRCS-y += dpdk_env.c
 SRCS-y += plugins.c
 SRCS-y += init.c
 SRCS-y += node.c
+SRCS-y += cli.c
+SRCS-y += mem_pool.c
 
 CFLAGS += -I .
 

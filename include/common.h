@@ -29,6 +29,8 @@
 #include <rte_ether.h>
 #include <rte_arp.h>
 
+#include "list.h"
+
 #define zen_panic(...) rte_panic(__VA_ARGS__)
 #define zen_log(level, format, ...) rte_log(level, \
                 RTE_LOGTYPE_USER1, "%s: "format, \
