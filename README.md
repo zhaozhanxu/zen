@@ -6,6 +6,10 @@
 * [简介](#简介)
 	* [背景](#背景)
 	* [功能](#功能)
+	* [实现](#实现)
+	* [特性](#特性)
+	* [简单网络协议node顺序图](#简单网络协议node顺序图)
+	* [功能清单](#功能清单)
 * [运行前配置](#运行前配置)
 	* [系统配置](#系统配置)
         * [驱动模块自动加载](#驱动模块自动加载)
@@ -23,6 +27,51 @@
 
 该框架主要是基于DPDK的报文收发来做，所有的网络协议或者功能模块都是以plugin的模式来完成。而plugin中时功能逻辑实现的一些node，这些node通过配置文件创建关联关系。这样我们在开发的时候可以都以plugin的方式进行开发单元功能模块，而根据配置文件灵活配置单元模块的调用关系。
 我能想到的可以用它来做网络协议栈、负载均衡、VRouter、GateWay、防DDOS之类软件。
+
+## 实现
+
+* 软件启动时首先加载DPDK的一些基本初始化
+* 从指定的路径加载plugin，plugin中包含了一个功能node
+* 解析node graph，该graph主要是列出了node之间的顺序关联
+* 报文根据node中逻辑判断next node，然后将报文传递给next node，并且将next node加入到runtime node list。
+* 顺序执行runtime node list中的node，处理报文，知道list完成。
+
+## 特性
+
+我期望该平台能做以下事情:
+
+* 网络的各个协议模块尽量解耦
+* 添加协议模块能够相对简单一些
+* 框架尽量做到不修改
+* 配置灵活
+* 模块尽量可以复用
+
+## 简单网络协议node顺序图
+
+```xml
+[ethernet-input]
+0 = ethernet_output
+1 = arp-input
+2 = ip4-input
+[ethernet-output]
+[arp-input]
+[ip4-input]
+0 = ip4-local
+1 = ip4-lookup
+[ip4-local]
+0 = ip4-icmp-input
+1 = ip4-udp-input
+2 = ip4-tcp-input
+[ip4-lookup]
+0 = ip4-output
+[ip4-output]
+0 = ethernet-output
+```
+
+## 功能清单
+
+- [ ] 基本框架
+
 
 # 运行前配置
 ---------------------------------------

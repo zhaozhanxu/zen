@@ -22,7 +22,7 @@ typedef enum {
     DPDK_NONE = 0,
     DPDK_NORMAL,
     DPDK_ETH,
-}dpdk_drv_type_e;
+} dpdk_drv_type_e;
 
 typedef struct {
     dpdk_drv_type_e	type;
@@ -31,7 +31,7 @@ typedef struct {
     char driver[16];
     uint32_t vendor_id;
     uint32_t device_id;
-}dpdk_drv_info_t;
+} dpdk_drv_info_t;
 
 #define foreach_dpdk_pmd			\
     _("rte_nicvf_pmd", THUNDERX)	\
@@ -54,7 +54,7 @@ typedef enum {
     foreach_dpdk_pmd
 #undef _
         DPDK_PMD_UNKNOWN,
-}dpdk_pmd_e;
+} dpdk_pmd_e;
 
 typedef enum {
     DPDK_PORT_TYPE_ETH_1G,
@@ -63,7 +63,7 @@ typedef enum {
     DPDK_PORT_TYPE_ETH_BOND,
     DPDK_PORT_TYPE_ETH_SWITCH,
     DPDK_PORT_TYPE_UNKNOWN,
-}dpdk_port_type_e;
+} dpdk_port_type_e;
 
 typedef struct {
     uint8_t	nb_queues;
@@ -75,19 +75,19 @@ typedef struct {
     uint16_t nb_tx_desc;
     struct rte_eth_conf port_conf;
     struct rte_eth_txconf tx_conf;
-}dpdk_port_t;
+} dpdk_port_t;
 
 typedef struct {
     uint8_t port_num;
     uint8_t queue_num;
-}dpdk_lcore_t;
+} dpdk_lcore_t;
 
 typedef struct {
     uint8_t nb_ports;
     char lcore_mask[31];
     dpdk_port_t port_info[RTE_MAX_ETHPORTS];
     dpdk_lcore_t lcore_info[RTE_MAX_LCORE];
-}dpdk_main_t;
+} dpdk_main_t;
 
 void dpdk_load_global_config(const char *file);
 void dpdk_close_global_config(void);

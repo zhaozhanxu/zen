@@ -679,10 +679,28 @@ main_loop(__attribute__((unused)) void *arg)
     uint8_t port_id = dm->lcore_info[lcore_id].port_num;
     uint8_t queue_id = dm->lcore_info[lcore_id].queue_num;
 
+    if (!nodes_topo_head || !nodes_topo_head->node_info ||
+                !nodes_topo_head->node_info->name) {
+        zen_panic("No node topology!!!\n");
+    }
+
+    node_info_t *node_start = hash_get_node(&node_map_head,
+                                            nodes_topo_head->node_info->name);
+    if (unlikely(!node_start)) {
+        zen_panic("first node %s not exist!\n",
+                  nodes_topo_head->node_info->name);
+    }
+
     struct rte_mbuf *mbufs[MAX_RING_NUM];
     while (1) {
         uint16_t nb_rx = rte_eth_rx_burst(port_id, queue_id, mbufs,
                                           MAX_RING_NUM);
-        zen_log(RTE_LOG_NOTICE, "rcv pkts number %d\n", nb_rx);
+        node_info_t *node = node_start;
+        put_pkts_to_curr_node(node, mbufs, nb_rx);
+        while (node) {
+            node->function(node);
+            nodes_runtime_t *r = node->runtime[lcore_id];
+            node = r->next->node_info;
+        }
     }
 }

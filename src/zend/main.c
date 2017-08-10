@@ -1,6 +1,7 @@
 #include "common.h"
 #include "dpdk_env.h"
 #include "plugins.h"
+#include "node.h"
 
 #define DPDK_CONF_FILE "/etc/zen/startup.conf"
 
@@ -24,6 +25,7 @@ main(int32_t argc, char **argv)
     dpdk_load_global_config(config_file);
     dpdk_init(argv[0]);
     load_plugins();
+    node_init();
 
     uint32_t lcore_id;
     rte_eal_mp_remote_launch(main_loop, NULL, CALL_MASTER);
