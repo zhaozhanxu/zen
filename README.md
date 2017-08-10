@@ -1,4 +1,4 @@
-#[ZEN](https://github.com/zhaozhanxu/zen) - A Datapath Platform Based DPDK
+# [ZEN](https://github.com/zhaozhanxu/zen) - A Datapath Platform Based DPDK
 
 # 目录
 ---------------------------------------
@@ -71,6 +71,12 @@
 ## 功能清单
 
 - [ ] 基本框架
+- [ ] cmd
+- [ ] ethernet
+- [ ] arp
+- [ ] ip
+- [ ] tcp
+- [ ] udp
 
 
 # 运行前配置
@@ -178,3 +184,22 @@ chkconfig --add bind_nics
 systemctl start bind_nics
 ```
 
+
+# 框架解析
+---------------------------------------
+
+## 通用模块
+
+现在主要实现了一些hash函数。
+
+## 核心模块
+
+现在实现了一些核心的功能，主要是为了框架能够平稳的运行，具体的请[戳这里](src/core/README.md)。
+
+## 命令行模块
+
+是一个独立的工具，通过连接主进程，并且获取支持的命令，以及配置的工具。此处只负责获取和下发，真正的命令功能实现都在主进程。
+
+## 插件模块
+
+主要是实现了一些网络功能的插件。
