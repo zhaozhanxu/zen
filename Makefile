@@ -13,14 +13,15 @@ APP = zen
 export APP
 
 ZEND_DIR = $(CUR_DIR)/src/zend
+PLUGIN_DIR = $(CUR_DIR)/src/plugins
 
 EXTRA_CFLAGS += -std=gnu99 -Wall -O0 -g
 EXTRA_CFLAGS += -I $(CUR_DIR)/include -I $(ZEND_DIR)
 export EXTRA_CFLAGS
 
-all: zend
-install: zend_install
-clean: zend_clean
+all: zend plugins
+install: zend_install plugins_install
+clean: zend_clean plugins_clean
 
 zend:
 	@make -s -C $(ZEND_DIR)
@@ -31,3 +32,12 @@ zend_clean:
 
 zend_install:
 	@make -s -C $(ZEND_DIR) install
+
+plugins:
+	@make -s -C $(PLUGIN_DIR)
+
+plugins_clean:
+	@make -s -C $(PLUGIN_DIR) clean
+
+plugins_install:
+	@make -s -C $(PLUGIN_DIR) install
